@@ -8,6 +8,16 @@ document.addEventListener("mousedown", () => {
 document.addEventListener("mouseup", () => {
     isMouseDown = false;
 });
+
+document.addEventListener("dragstart", (e) => {
+    e.preventDefault(); // Prevent default dragging behavior
+});
+function colorCase(jcol) {
+    jcol.style.backgroundColor = "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0"); // Random color
+    let currentOpacity = parseFloat(jcol.style.opacity) || 0;
+    currentOpacity = Math.min(currentOpacity + 0.1, 1); // Increase opacity
+    jcol.style.opacity = currentOpacity;
+}
 function fillGrid(ncase){
     while(!Number.isInteger(ncase) || ncase > 100 || ncase < 1){
         if(ncase > 100){
@@ -35,12 +45,12 @@ function fillGrid(ncase){
             jcol.classList.add("case");
             jcol.style.backgroundColor = "grey";
             jcol.style.opacity = 0;
+            jcol.addEventListener("click", () => {
+                colorCase(jcol); // Color the case on click
+            });
             jcol.addEventListener("mouseenter", () => {
                 if (isMouseDown) { // Only change color if the mouse button is down
-                    jcol.style.backgroundColor = "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0");
-                    let currentOpacity = parseFloat(jcol.style.opacity) || 0;
-                    currentOpacity = Math.min(currentOpacity + 0.1, 1);
-                    jcol.style.opacity = currentOpacity;
+                    colorCase(jcol);
                 }
             });
             row.appendChild(jcol);
